@@ -5,10 +5,10 @@ resource "google_compute_instance" "instance" {
 
   boot_disk {
     initialize_params {
-      image  = lookup(initialize_params.value, "image", null)
-      size   = lookup(initialize_params.value, "size_gb", null)
-      type   = lookup(initialize_params.value, "type", null)
-      labels = lookup(initialize_params.value, "labels", null)
+      image  = lookup(var.boot_disk, "image", null)
+      size   = lookup(var.boot_disk, "size_gb", null)
+      type   = lookup(var.boot_disk, "type", null)
+      labels = lookup(var.boot_disk, "labels", null)
     }
   }
 
