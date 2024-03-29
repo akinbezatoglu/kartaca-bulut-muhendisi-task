@@ -14,3 +14,8 @@ variable "zone" {
   description = "The zone will be used to choose the default location for zonal resources"
   default     = "europe-west1-c"
 }
+
+variable "suffix_length" {
+  type    = number
+  default = 6
+}
