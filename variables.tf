@@ -147,7 +147,12 @@ variable "private_network_ips" {
   default = ["10.100.80.100", "10.100.81.100"]
 }
 
-variable "ssh_protocol" {
+variable "firewall_source_tag" {
+  type    = string
+  default = "web"
+}
+
+variable "tcp_protocol" {
   type    = string
   default = "tcp"
 }
