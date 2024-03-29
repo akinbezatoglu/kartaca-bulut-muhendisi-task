@@ -87,3 +87,58 @@ resource "google_compute_resource_policy" "snapshot_policy" {
     }
   }
 }
+
+# Create the compute instances
+locals {
+  boot_disk = {
+    image = var.disk_image
+    size  = var.boot_disk_size_gb
+    type  = var.standard_persistent_disk
+  }
+}
+
+module "instance" {
+  source = "./modules/compute-instance"
+  count  = var.num_of_instances
+
+  instance_name = "${var.instance_name_prefix}${count.index + 1}"
+  machine_type  = var.machine_type
+  tags          = [var.network_tag]
+  policy_name   = google_compute_resource_policy.snapshot_policy.name
+
+  boot_disk = local.boot_disk
+  additional_disks = [{
+    name = "data-disk-${var.instance_name_prefix}${count.index + 1}"
+    type = var.standard_persistent_disk
+    size = var.data_disk_size_gb
+  }]
+  network_interfaces = [{
+    network    = google_compute_network.network.self_link
+    subnetwork = google_compute_subnetwork.subnet.self_link
+    network_ip = var.private_network_ips[count.index]
+  }]
+}
+
+resource "google_compute_firewall" "allow_ssh" {
+  name        = "allow-ssh-${random_string.suffix.result}"
+  network     = google_compute_network.network.self_link
+  target_tags = [var.network_tag]
+
+  allow {
+    protocol = var.ssh_protocol
+    ports    = [var.ssh_port]
+  }
+}
+
+resource "google_compute_router" "router" {
+  name    = "router-${random_string.suffix.result}"
+  network = google_compute_network.network.self_link
+}
+
+resource "google_compute_router_nat" "nat" {
+  name                               = "nat-gateway-${random_string.suffix.result}"
+  router                             = google_compute_router.router.name
+  region                             = google_compute_router.router.region
+  nat_ip_allocate_option             = var.nat_ip_allocate_option
+  source_subnetwork_ip_ranges_to_nat = var.source_subnetwork_ip_ranges_to_nat
+}

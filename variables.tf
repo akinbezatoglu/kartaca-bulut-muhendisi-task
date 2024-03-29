@@ -100,3 +100,69 @@ variable "snapshots_storage_location" {
   type    = string
   default = "eu"
 }
+
+# Compute Instance
+variable "num_of_instances" {
+  type    = number
+  default = 2
+}
+
+variable "instance_name_prefix" {
+  type    = string
+  default = "kartaca-staj"
+}
+
+variable "machine_type" {
+  type    = string
+  default = "e2-medium"
+}
+
+variable "network_tag" {
+  type    = string
+  default = "kartaca-staj"
+}
+
+variable "disk_image" {
+  type    = string
+  default = "debian-12"
+}
+
+variable "standard_persistent_disk" {
+  type    = string
+  default = "pd-standard"
+}
+
+variable "boot_disk_size_gb" {
+  type    = number
+  default = 16
+}
+
+variable "data_disk_size_gb" {
+  type    = number
+  default = 20
+}
+
+variable "private_network_ips" {
+  type    = list(string)
+  default = ["10.100.80.100", "10.100.81.100"]
+}
+
+variable "ssh_protocol" {
+  type    = string
+  default = "tcp"
+}
+
+variable "ssh_port" {
+  type    = string
+  default = "22"
+}
+
+variable "nat_ip_allocate_option" {
+  type    = string
+  default = "AUTO_ONLY"
+}
+
+variable "source_subnetwork_ip_ranges_to_nat" {
+  type    = string
+  default = "ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES"
+}
