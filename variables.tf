@@ -1,11 +1,11 @@
 variable "project" {
   type        = string
   description = "The ID of the Google Cloud project"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "service_account_id" {
-  type = string
+  type      = string
   sensitive = true
 }
 

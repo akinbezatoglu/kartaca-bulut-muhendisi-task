@@ -146,7 +146,7 @@ resource "google_compute_router_nat" "nat" {
 
 # Create a GKE cluster
 resource "google_service_account" "default" {
-  account_id   = var.service_account_id
+  account_id = var.service_account_id
 }
 
 resource "google_container_cluster" "primary" {
@@ -166,7 +166,7 @@ resource "google_container_cluster" "primary" {
     disk_size_gb = var.default_node_pool["disk_size_gb"]
 
     service_account = google_service_account.default.email
-    oauth_scopes    = [
+    oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
   }
@@ -175,7 +175,7 @@ resource "google_container_cluster" "primary" {
     cluster_secondary_range_name  = var.gke_pod_secondary_range.name
     services_secondary_range_name = var.gke_service_secondary_range.name
   }
-  
+
   master_authorized_networks_config {
     cidr_blocks {
       cidr_block   = var.external_network_access_k8s.cidr_block
