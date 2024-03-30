@@ -43,23 +43,23 @@ variable "primary_ip_range" {
 
 variable "gke_pod_secondary_range" {
   type = object({
-    range_name    = string
-    ip_cidr_range = string
+    name          = string
+    ip_cidr_block = string
   })
   default = {
-    range_name    = "pod"
-    ip_cidr_range = "10.100.0.0/18"
+    name          = "pod"
+    ip_cidr_block = "10.100.0.0/18"
   }
 }
 
 variable "gke_service_secondary_range" {
   type = object({
-    range_name    = string
-    ip_cidr_range = string
+    name          = string
+    ip_cidr_block = string
   })
   default = {
-    range_name    = "service"
-    ip_cidr_range = "10.100.64.0/20"
+    name          = "service"
+    ip_cidr_block = "10.100.64.0/20"
   }
 }
 
