@@ -1,11 +1,11 @@
 name: Terraform Plan and Apply Workflow
 
 on:
-  #push:
-  #  branches: [ "main" ]
-  #  paths:
-  #    - '**/*.tf'
-  #    - '.github/workflows/terraform.yaml'
+  push:
+    branches: [ "main" ]
+    paths:
+      - '**/*.tf'
+      - '.github/workflows/terraform.yaml'
   pull_request:
     branches: [ "main" ]
     paths:
@@ -90,10 +90,10 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-      #- name: Terraform Apply
-      #  if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      #  run: terraform apply -auto-approve -var project='${{ secrets.PROJECT_ID }}' -var service_account_email='${{ secrets.SA_EMAIL }}'
-      #  continue-on-error: true
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -var project='${{ secrets.PROJECT_ID }}' -var service_account_email='${{ secrets.SA_EMAIL }}'
+        continue-on-error: true
       
-      #- name: Terraform Destroy
-      #  run: terraform destroy -auto-approve -var project='${{ secrets.PROJECT_ID }}' -var service_account_email='${{ secrets.SA_EMAIL }}'
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve -var project='${{ secrets.PROJECT_ID }}' -var service_account_email='${{ secrets.SA_EMAIL }}'
