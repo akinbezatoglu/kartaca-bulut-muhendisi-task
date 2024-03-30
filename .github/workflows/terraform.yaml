@@ -1,0 +1,93 @@
+name: Terraform Plan and Apply Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - '**/*.tf'
+      - '.github/workflows/terraform.yaml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - '**/*.tf'
+      - '.github/workflows/terraform.yaml'
+
+jobs:
+  terraform:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      pull-requests: 'write' #Needed to comment on the PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Google Auth
+        uses: 'google-github-actions/auth@v1.0.0'
+        with:
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}'
+          service_account: '${{ secrets.SA_EMAIL }}'
+
+      - name: Terraform CLI
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.7.5
+
+      - id: fmt
+        name: Terraform Format
+        run: terraform fmt --recursive -check
+
+      - id: init
+        name: Terraform Init
+        run: terraform init -input=false -backend-config="prefix=terraform-demo" -backend-config="bucket=tf-state-storage-2023"
+
+      - id: validate
+        name: Terraform Validate
+        run: terraform validate -no-color
+
+      - id: plan
+        name: Terraform Plan
+        run: terraform plan -no-color
+        continue-on-error: true
+
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format: \`${{ steps.fmt.outcome }}\`
+            #### Terraform Init: \`${{ steps.init.outcome }}\`
+            #### Terraform Validation: \`${{ steps.validate.outcome }}\`
+            #### Terraform Plan: \`${{ steps.plan.outcome }}\`
+            
+            <details><summary>Show Plan</summary>
+            
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+            
+            </details>
+            
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+            
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -var project='${{ secrets.PROJECT_ID }}'
+        continue-on-error: true
+      
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve -var project='${{ secrets.PROJECT_ID }}'
