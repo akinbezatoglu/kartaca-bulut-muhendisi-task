@@ -54,7 +54,7 @@ jobs:
 
       - id: plan
         name: Terraform Plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var project='${{ secrets.PROJECT_ID }}'
         continue-on-error: true
 
       - uses: actions/github-script@v6
