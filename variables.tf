@@ -1,6 +1,12 @@
 variable "project" {
   type        = string
   description = "The ID of the Google Cloud project"
+  sensitive = true
+}
+
+variable "service_account_id" {
+  type = string
+  sensitive = true
 }
 
 variable "region" {
