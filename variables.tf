@@ -4,7 +4,7 @@ variable "project" {
   sensitive   = true
 }
 
-variable "service_account_id" {
+variable "service_account_email" {
   type      = string
   sensitive = true
 }
@@ -198,6 +198,11 @@ variable "external_network_access_k8s" {
     name       = "GKE Control Plane Access"
     cidr_block = "195.226.0.0/16"
   }
+}
+
+variable "disable_deletion_protection" {
+  type = bool
+  default = false
 }
 
 variable "release_channel" {

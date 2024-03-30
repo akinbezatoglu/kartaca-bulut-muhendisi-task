@@ -145,10 +145,6 @@ resource "google_compute_router_nat" "nat" {
 }
 
 # Create a GKE cluster
-resource "google_service_account" "default" {
-  account_id = var.service_account_id
-}
-
 resource "google_container_cluster" "primary" {
   name       = "${var.cluster_name}-${random_string.suffix.result}"
   location   = var.zone
@@ -157,6 +153,7 @@ resource "google_container_cluster" "primary" {
 
   remove_default_node_pool = var.enable_remove_default_node_pool
   initial_node_count       = var.default_node_pool["count"]
+  deletion_protection = var.disable_deletion_protection
 
   node_config {
     preemptible  = var.default_node_pool["enable_spot_vm"]
@@ -165,7 +162,7 @@ resource "google_container_cluster" "primary" {
     disk_type    = var.default_node_pool["disk_type"]
     disk_size_gb = var.default_node_pool["disk_size_gb"]
 
-    service_account = google_service_account.default.email
+    service_account = var.service_account_email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
@@ -191,6 +188,7 @@ resource "google_container_cluster" "primary" {
 resource "google_container_node_pool" "spot" {
   name       = "${var.preemptible_node_pool["name"]}-${random_string.suffix.result}"
   cluster    = google_container_cluster.primary.name
+  node_locations = [ var.zone ]
   node_count = var.preemptible_node_pool["count"]
 
   node_config {
@@ -199,6 +197,11 @@ resource "google_container_node_pool" "spot" {
 
     disk_type    = var.preemptible_node_pool["disk_type"]
     disk_size_gb = var.preemptible_node_pool["disk_size_gb"]
+
+    service_account = var.service_account_email
+    oauth_scopes = [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ]
 
     taint {
       key    = var.no_schedule_node_taint["key"]
