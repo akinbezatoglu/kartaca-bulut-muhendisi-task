@@ -146,9 +146,10 @@ resource "google_compute_router_nat" "nat" {
 
 # Create a GKE cluster
 resource "google_container_cluster" "primary" {
-  name     = "${var.cluster_name}-${random_string.suffix.result}"
-  location = var.zone
-  network  = google_compute_network.network.self_link
+  name       = "${var.cluster_name}-${random_string.suffix.result}"
+  location   = var.zone
+  network    = google_compute_network.network.self_link
+  subnetwork = google_compute_subnetwork.subnet.self_link
 
   remove_default_node_pool = var.enable_remove_default_node_pool
   initial_node_count       = 1
