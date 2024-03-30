@@ -171,3 +171,91 @@ variable "source_subnetwork_ip_ranges_to_nat" {
   type    = string
   default = "ALL_SUBNETWORKS_ALL_PRIMARY_IP_RANGES"
 }
+
+# GKE
+variable "cluster_name" {
+  type    = string
+  default = "kubernetes-cluster"
+}
+
+variable "enable_remove_default_node_pool" {
+  type    = bool
+  default = true
+}
+
+variable "external_network_access_k8s" {
+  type = object({
+    name       = string
+    cidr_block = string
+  })
+  default = {
+    name       = "GKE Control Plane Access"
+    cidr_block = "195.226.0.0/16"
+  }
+}
+
+variable "release_channel" {
+  type    = string
+  default = "RAPID"
+}
+
+variable "default_node_pool" {
+  type = object({
+    name           = string
+    count          = number
+    enable_spot_vm = bool
+    machine_type   = string
+    disk_type      = string
+    disk_size_gb   = number
+  })
+  default = {
+    name           = "default-pool"
+    count          = 1
+    enable_spot_vm = false
+    machine_type   = "e2-medium"
+    disk_type      = "pd-standard"
+    disk_size_gb   = 64
+  }
+}
+
+variable "preemptible_node_pool" {
+  type = object({
+    name           = string
+    count          = number
+    enable_spot_vm = bool
+    machine_type   = string
+    disk_type      = string
+    disk_size_gb   = number
+  })
+  default = {
+    name           = "spot-pool"
+    count          = 1
+    enable_spot_vm = true
+    machine_type   = "n2-standard-2"
+    disk_type      = "pd-balanced"
+    disk_size_gb   = 64
+  }
+}
+
+variable "no_schedule_node_taint" {
+  type = object({
+    key    = string
+    value  = string
+    effect = string
+  })
+  default = {
+    key    = "preemptible"
+    value  = "true"
+    effect = "NO_SCHEDULE"
+  }
+}
+
+variable "min_num_of_autoscale_node" {
+  type    = number
+  default = 0
+}
+
+variable "max_num_of_autoscale_node" {
+  type    = number
+  default = 5
+}
