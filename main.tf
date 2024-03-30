@@ -153,7 +153,7 @@ resource "google_container_cluster" "primary" {
 
   remove_default_node_pool = var.enable_remove_default_node_pool
   initial_node_count       = var.default_node_pool["count"]
-  deletion_protection = var.disable_deletion_protection
+  deletion_protection      = var.disable_deletion_protection
 
   node_config {
     preemptible  = var.default_node_pool["enable_spot_vm"]
@@ -188,7 +188,7 @@ resource "google_container_cluster" "primary" {
 resource "google_container_node_pool" "spot" {
   name       = "${var.preemptible_node_pool["name"]}-${random_string.suffix.result}"
   cluster    = google_container_cluster.primary.name
-  node_locations = [ var.zone ]
+  location   = var.zone
   node_count = var.preemptible_node_pool["count"]
 
   node_config {

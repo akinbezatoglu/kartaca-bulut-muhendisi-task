@@ -201,7 +201,7 @@ variable "external_network_access_k8s" {
 }
 
 variable "disable_deletion_protection" {
-  type = bool
+  type    = bool
   default = false
 }
 
