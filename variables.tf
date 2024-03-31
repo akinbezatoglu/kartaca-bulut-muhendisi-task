@@ -270,3 +270,94 @@ variable "max_num_of_autoscale_node" {
   type    = number
   default = 5
 }
+
+# CloudSQL
+variable "db_instance_name" {
+  type    = string
+  default = "mysql-instance"
+}
+
+variable "db_version" {
+  type    = string
+  default = "MYSQL_8_0"
+}
+
+variable "db_instance_type" {
+  type    = string
+  default = "db-n1-standard-2"
+}
+
+variable "enable_disk_autoresize" {
+  type    = bool
+  default = true
+}
+
+variable "db_instance_disk_size_gb" {
+  type    = number
+  default = 10
+}
+
+variable "db_instance_disk_type" {
+  type    = string
+  default = "PD_HDD"
+}
+
+variable "disable_public_ip" {
+  type    = bool
+  default = false
+}
+
+variable "enable_backup" {
+  type    = bool
+  default = true
+}
+
+variable "db_instance_max_retention_days" {
+  type    = number
+  default = 5
+}
+
+variable "db_instance_backup_start_time" {
+  type    = string
+  default = "20:00"
+}
+
+variable "db_instance_backup_location" {
+  type    = string
+  default = "EU"
+}
+
+variable "db_instance_maintenance_day" {
+  type    = number
+  default = 6 // Saturday
+}
+
+variable "db_instance_maintenance_time" {
+  type    = number
+  default = 4 // 04:00
+}
+
+variable "database_name" {
+  type    = string
+  default = "kartaca"
+}
+
+variable "db_user_name" {
+  type    = string
+  default = "kartaca-staj"
+}
+
+variable "db_password_length" {
+  type    = number
+  default = 16
+}
+
+variable "db_secret_id" {
+  type    = string
+  default = "db-secret"
+}
+
+variable "app_secret_id" {
+  type    = string
+  default = "app-secret"
+}
