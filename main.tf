@@ -221,12 +221,12 @@ resource "google_compute_global_address" "private_ip_address" {
   name          = "private-ip-address"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
-  prefix_length = 24
-  network       = google_compute_network.network.self_link
+  prefix_length = 16
+  network       = google_compute_network.network.id
 }
 
 resource "google_service_networking_connection" "private_vpc_connection" {
-  network                 = google_compute_network.network.self_link
+  network                 = google_compute_network.network.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
 }
@@ -235,6 +235,7 @@ resource "google_sql_database_instance" "mysql_instance" {
   name                = "${var.db_instance_name}-${random_string.suffix.result}"
   database_version    = var.db_version
   deletion_protection = var.disable_deletion_protection
+ depends_on           = [google_service_networking_connection.private_vpc_connection] 
 
   settings {
     tier            = var.db_instance_type
@@ -247,8 +248,9 @@ resource "google_sql_database_instance" "mysql_instance" {
     }
 
     ip_configuration {
-      ipv4_enabled    = var.disable_public_ip
-      private_network = google_compute_network.network.self_link
+      ipv4_enabled                                  = var.disable_public_ip
+      private_network                               = google_compute_network.network.id
+      enable_private_path_for_google_cloud_services = true
     }
 
     backup_configuration {
