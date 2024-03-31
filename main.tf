@@ -235,7 +235,7 @@ resource "google_sql_database_instance" "mysql_instance" {
   name                = "${var.db_instance_name}-${random_string.suffix.result}"
   database_version    = var.db_version
   deletion_protection = var.disable_deletion_protection
- depends_on           = [google_service_networking_connection.private_vpc_connection] 
+  depends_on          = [google_service_networking_connection.private_vpc_connection]
 
   settings {
     tier            = var.db_instance_type
