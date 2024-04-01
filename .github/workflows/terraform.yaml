@@ -5,11 +5,13 @@ on:
     branches: [ "main" ]
     paths:
       - '**/*.tf'
+      - '**/**/**/*.tf' # add modules path
       - '.github/workflows/terraform.yaml'
   pull_request:
     branches: [ "main" ]
     paths:
       - '**/*.tf'
+      - '**/**/**/*.tf' # add modules path
       - '.github/workflows/terraform.yaml'
 
 jobs:
