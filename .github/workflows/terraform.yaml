@@ -7,9 +7,9 @@ on:
       - '**/*.tf'
       - '**/**/**/*.tf' # add modules path
       - '.github/workflows/terraform.yaml'
-  pull_request_review:
     types:
-      - submitted
+      - opened
+      - closed
 
 jobs:
   terraform:
@@ -90,9 +90,10 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
-        if: github.event.review.state == 'approved'
+        if: github.event.pull_request.merged == true
         run: terraform apply -auto-approve -var project='${{ secrets.PROJECT_ID }}' -var service_account_email='${{ secrets.SA_EMAIL }}'
         continue-on-error: true
       
       - name: Terraform Destroy
+        if: github.event.pull_request.merged == true
         run: terraform destroy -auto-approve -var project='${{ secrets.PROJECT_ID }}' -var service_account_email='${{ secrets.SA_EMAIL }}'
