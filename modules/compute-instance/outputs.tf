@@ -1,4 +1,4 @@
-output "instance_name" {
+output "name" {
   value = google_compute_instance.instance.name
 }
 
