@@ -8,6 +8,7 @@ variable "machine_type" {
 
 variable "tags" {
   type = set(string)
+  default = {}
 }
 
 variable "boot_disk" {
@@ -26,6 +27,7 @@ variable "additional_disks" {
     size = optional(number)
     zone = optional(string)
   }))
+  default = null
 }
 
 variable "network_interfaces" {
@@ -34,8 +36,10 @@ variable "network_interfaces" {
     subnetwork = string
     network_ip = string
   }))
+  default = null
 }
 
 variable "policy_name" {
   type = string
+  default = null
 }
