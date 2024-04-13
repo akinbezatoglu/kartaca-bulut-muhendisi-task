@@ -9,3 +9,6 @@ locals {
     type  = var.standard_persistent_disk
   }
 }
+
+data "google_project" "project" {
+}

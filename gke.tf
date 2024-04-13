@@ -19,7 +19,6 @@ resource "google_container_cluster" "primary" {
     disk_type    = var.default_node_pool["disk_type"]
     disk_size_gb = var.default_node_pool["disk_size_gb"]
 
-    service_account = var.service_account_email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
@@ -58,7 +57,6 @@ resource "google_container_node_pool" "spot" {
     disk_type    = var.preemptible_node_pool["disk_type"]
     disk_size_gb = var.preemptible_node_pool["disk_size_gb"]
 
-    service_account = var.service_account_email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]

@@ -4,11 +4,6 @@ variable "project" {
   sensitive   = true
 }
 
-variable "service_account_email" {
-  type      = string
-  sensitive = true
-}
-
 variable "region" {
   type        = string
   description = "The region will be used to choose the default location for regional resources"
