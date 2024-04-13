@@ -16,9 +16,9 @@ resource "google_secret_manager_secret_version" "app_secret_version" {
 }
 
 resource "google_secret_manager_secret_iam_member" "app_secret-access" {
-  secret_id = google_secret_manager_secret.app_secret.id
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+  secret_id  = google_secret_manager_secret.app_secret.id
+  role       = "roles/secretmanager.secretAccessor"
+  member     = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
   depends_on = [google_secret_manager_secret.app_secret]
 }
 
@@ -36,8 +36,8 @@ resource "google_secret_manager_secret_version" "db_secret_version" {
 }
 
 resource "google_secret_manager_secret_iam_member" "db_secret-access" {
-  secret_id = google_secret_manager_secret.db_secret.id
-  role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+  secret_id  = google_secret_manager_secret.db_secret.id
+  role       = "roles/secretmanager.secretAccessor"
+  member     = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
   depends_on = [google_secret_manager_secret.db_secret]
 }

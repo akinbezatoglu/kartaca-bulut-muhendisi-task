@@ -7,7 +7,7 @@ variable "machine_type" {
 }
 
 variable "tags" {
-  type = set(string)
+  type    = set(string)
   default = {}
 }
 
@@ -40,6 +40,6 @@ variable "network_interfaces" {
 }
 
 variable "policy_name" {
-  type = string
+  type    = string
   default = null
 }
