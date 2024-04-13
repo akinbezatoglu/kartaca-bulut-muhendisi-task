@@ -8,7 +8,7 @@ variable "machine_type" {
 
 variable "tags" {
   type    = set(string)
-  default = {}
+  default = null
 }
 
 variable "boot_disk" {

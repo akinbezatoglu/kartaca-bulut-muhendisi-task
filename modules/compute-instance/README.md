@@ -8,7 +8,7 @@ This module is a submodule that can be used as a building blocks to provision VM
 |------|-------------|------|---------|:--------:|
 | instance\_name | The name of the instance | `string` | `n/a` | yes |
 | machine\_type | The type of the machine | `string` | `n/a` | yes |
-| tags | The tags for the instance | `set(string)` | `{}` | no |
+| tags | The tags for the instance | `set(string)` | `null` | no |
 | boot\_disk | The boot disk configuration |<pre>object({<br>image=optional(string), <br>size_gb=optional(number), <br>type=optional(string), <br>labels=optional(map(string))<br>})</pre> | `n/a` | yes |
 | additional\_disks | The additional disks configuration	| <pre>list(object({<br>name=string, <br>type=optional(string), <br>size=optional(number), <br>zone=optional(string)<br>}))</pre> | `null` | no |
 | network\_interfaces | The network interfaces configuration | <pre>list(object({<br>network=string, <br>subnetwork=string, <br>network_ip=string<br>}))</pre> | `null` | no |
